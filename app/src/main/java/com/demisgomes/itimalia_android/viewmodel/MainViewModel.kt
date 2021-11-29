@@ -10,9 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel : ViewModel() {
-    private val repository: Repository = RepositoryImpl(RetroConfig.buildWebService())
-    //ViewModelProvider na activity
+class MainViewModel(private val repository: Repository) : ViewModel() {
 
     private val _responseViewModel = MutableLiveData<ResponseViewModel<List<Animal>>>()
     val responseViewModel : LiveData<ResponseViewModel<List<Animal>>> = _responseViewModel
