@@ -13,24 +13,20 @@ import kotlinx.coroutines.withContext
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
     private val _responseViewModel = MutableLiveData<ResponseViewModel<List<Animal>>>()
-    val responseViewModel : LiveData<ResponseViewModel<List<Animal>>> = _responseViewModel
+    val responseViewModel: LiveData<ResponseViewModel<List<Animal>>> = _responseViewModel
 
     init {
         viewModelScope.launch {
-            //withContext(Dispatchers.IO){
-                repository.getAnimalsList(object : RepositoryCallback<List<Animal>> {
-                    override fun success(t: List<Animal>) {
-                        //withContext(Dispatchers.Main){
-                            _responseViewModel.value = ResponseViewModel(t)
-                        //}
-                    }
+            repository.getAnimalsList(object : RepositoryCallback<List<Animal>> {
+                override fun success(t: List<Animal>) {
+                    _responseViewModel.value = ResponseViewModel(t)
+                }
 
-                    override fun failure(message: String) {
-                        _responseViewModel.value = ResponseViewModel(errorMessage = message)
-                    }
+                override fun failure(message: String) {
+                    _responseViewModel.value = ResponseViewModel(errorMessage = message)
+                }
 
-                })
-            //}
+            })
         }
     }
 }

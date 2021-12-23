@@ -1,5 +1,6 @@
 package com.demisgomes.itimalia_android.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +27,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.responseViewModel.observe(this){
             val animalsAdapter = it.response?.let { it1 -> AnimalsAdapter(it1) { animalName ->
-                    Toast.makeText(this, animalName, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AnimalDetailActivity::class.java)
+                    intent.putExtra("name", animalName)
+                    startActivity(intent)
                 }
             }
             recyclerView.adapter = animalsAdapter
