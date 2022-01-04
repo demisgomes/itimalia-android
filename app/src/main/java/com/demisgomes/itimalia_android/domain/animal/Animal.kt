@@ -1,5 +1,6 @@
 package com.demisgomes.itimalia_android.domain.animal
 
+import java.io.Serializable
 import java.util.Date
 
 data class Animal(
@@ -17,5 +18,6 @@ data class Animal(
     val size: AnimalSize,
     val castrated: Boolean,
     val createdById: Int,
+    var imageUrl: String = ""
     //val adoptedBy : UserPublicInfo? = null
-)
+) : Serializable

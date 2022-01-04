@@ -4,17 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.demisgomes.itimalia_android.R
 import com.demisgomes.itimalia_android.adapter.AnimalsAdapter
-import com.demisgomes.itimalia_android.domain.animal.Animal
-import com.demisgomes.itimalia_android.domain.animal.Specie
-import com.demisgomes.itimalia_android.domain.animal.TimeUnit
 import com.demisgomes.itimalia_android.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
+
+const val animalKey = "animal";
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModel()
@@ -26,9 +23,9 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         viewModel.responseViewModel.observe(this){
-            val animalsAdapter = it.response?.let { it1 -> AnimalsAdapter(it1) { animalName ->
+            val animalsAdapter = it.response?.let { it1 -> AnimalsAdapter(it1) { animal ->
                     val intent = Intent(this, AnimalDetailActivity::class.java)
-                    intent.putExtra("name", animalName)
+                    intent.putExtra(animalKey, animal)
                     startActivity(intent)
                 }
             }
