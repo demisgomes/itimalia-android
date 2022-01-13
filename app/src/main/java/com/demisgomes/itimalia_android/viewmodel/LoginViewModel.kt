@@ -2,20 +2,21 @@ package com.demisgomes.itimalia_android.viewmodel
 
 import androidx.lifecycle.*
 import com.demisgomes.itimalia_android.domain.animal.Animal
+import com.demisgomes.itimalia_android.domain.user.User
+import com.demisgomes.itimalia_android.domain.user.UserLogin
 import com.demisgomes.itimalia_android.repository.Repository
 import com.demisgomes.itimalia_android.retrofit.RepositoryCallback
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class MainViewModel(private val repository: Repository) : ViewModel() {
+class LoginViewModel(private val repository: Repository) : ViewModel() {
 
-    private val _responseViewModel = MutableLiveData<ResponseViewModel<List<Animal>>>()
-    val responseViewModel: LiveData<ResponseViewModel<List<Animal>>> = _responseViewModel
+    private val _responseViewModel = MutableLiveData<ResponseViewModel<User>>()
+    val responseViewModel: LiveData<ResponseViewModel<User>> = _responseViewModel
 
-    init {
+    fun login(userLogin: UserLogin) =
         viewModelScope.launch {
-            repository.getAnimalsList(object : RepositoryCallback<List<Animal>> {
-                override fun success(t: List<Animal>) {
+            repository.login(userLogin, object : RepositoryCallback<User> {
+                override fun success(t: User) {
                     _responseViewModel.value = ResponseViewModel(t)
                 }
 
@@ -25,5 +26,4 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
             })
         }
-    }
 }
