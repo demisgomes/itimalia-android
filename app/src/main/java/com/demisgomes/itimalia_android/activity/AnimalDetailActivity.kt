@@ -26,7 +26,7 @@ class AnimalDetailActivity : AppCompatActivity() {
         if (intent.hasExtra(animalKey)){
             val animal = intent.extras?.get(animalKey) as Animal
 
-            //Glide.with(this).load(animal.imageUrl).centerCrop().into(imageViewAnimal)
+            Glide.with(this).load(animal.imageUrl).centerCrop().into(imageViewAnimal)
             textViewName.text = animal.name
             textViewDescription.text = animal.description
             textViewAge.text = "${animal.age} ${animal.timeUnit.toString().lowercase()}s"
