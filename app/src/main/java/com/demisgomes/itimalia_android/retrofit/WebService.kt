@@ -1,6 +1,7 @@
 package com.demisgomes.itimalia_android.retrofit
 
 import com.demisgomes.itimalia_android.domain.animal.Animal
+import com.demisgomes.itimalia_android.domain.user.NewUser
 import com.demisgomes.itimalia_android.domain.user.User
 import com.demisgomes.itimalia_android.domain.user.UserLogin
 import retrofit2.Call
@@ -14,4 +15,7 @@ interface WebService {
 
     @POST("/login")
     fun login(@Body userLogin: UserLogin): Call<User>
+
+    @POST("/users")
+    fun signUp(@Body newUser: NewUser): Call<User>
 }

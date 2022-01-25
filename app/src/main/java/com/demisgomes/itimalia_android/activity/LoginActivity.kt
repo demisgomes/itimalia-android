@@ -1,5 +1,6 @@
 package com.demisgomes.itimalia_android.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -22,6 +23,8 @@ class LoginActivity : AppCompatActivity() {
         val editTextPassword: EditText = findViewById(R.id.editTextPassword)
         val buttonSignIn: Button = findViewById(R.id.buttonSignIn)
 
+        val buttonSignUp: Button = findViewById(R.id.button_sign_in_sign_up)
+
         viewModel.responseViewModel.observe(this) {
             val user = it.response
 
@@ -41,6 +44,11 @@ class LoginActivity : AppCompatActivity() {
             val password = editTextPassword.text.toString().trim()
 
             viewModel.login(UserLogin(email, password))
+        }
+
+        buttonSignUp.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
         }
     }
 }

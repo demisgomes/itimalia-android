@@ -1,7 +1,7 @@
 package com.demisgomes.itimalia_android.repository
 
-import android.util.Log
 import com.demisgomes.itimalia_android.domain.animal.Animal
+import com.demisgomes.itimalia_android.domain.user.NewUser
 import com.demisgomes.itimalia_android.domain.user.User
 import com.demisgomes.itimalia_android.domain.user.UserLogin
 import com.demisgomes.itimalia_android.retrofit.RepositoryCallback
@@ -31,6 +31,24 @@ class RepositoryImpl(private val webService: WebService) : Repository {
 
     override fun login(userLogin: UserLogin, callbackLogin: RepositoryCallback<User>) {
         val call = webService.login(userLogin)
+
+        call.enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { callbackLogin.success(it) }
+                }
+                else callbackLogin.failure(response.message())
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                t.message?.let { callbackLogin.failure(it) }
+            }
+
+        })
+    }
+
+    override fun signUp(newUser: NewUser, callbackLogin: RepositoryCallback<User>) {
+        val call = webService.signUp(newUser)
 
         call.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {

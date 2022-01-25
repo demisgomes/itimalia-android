@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">itimalia-android</string>
+    <string-array name="spinner_gender_items">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Not Declared</item>
+    </string-array>
 </resources>
