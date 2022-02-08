@@ -2,10 +2,7 @@ package com.demisgomes.itimalia_android.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import com.demisgomes.itimalia_android.R
 import com.demisgomes.itimalia_android.domain.user.Gender
 import com.demisgomes.itimalia_android.domain.user.NewUser
@@ -29,6 +26,8 @@ class SignUpActivity : AppCompatActivity() {
         val editTextPhone: EditText = findViewById(R.id.edit_text_sign_up_phone)
         val spinnerGender: Spinner = findViewById(R.id.spinner_sign_up_gender)
 
+        spinnerGender.adapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, Gender.values().map { it.description })
+
         val buttonSignUp: Button = findViewById(R.id.button_sign_up)
 
         viewModel.responseViewModel.observe(this) {
@@ -36,6 +35,7 @@ class SignUpActivity : AppCompatActivity() {
 
             if (user !== null){
                 Toast.makeText(this, "Cadastro efetuado com sucesso, ${user.name}!", Toast.LENGTH_LONG).show()
+                finish()
             }
 
             else {
@@ -50,16 +50,41 @@ class SignUpActivity : AppCompatActivity() {
             val password = editTextPassword.text.toString().trim()
             val confirmPassword = editTextConfirmPassword.text.toString().trim()
             val phone = editTextPhone.text.toString().trim()
-            val gender = Gender.NOT_DECLARED
+            val gender = Gender.valueOf(spinnerGender.selectedItem.toString())
 
-            viewModel.signUp(NewUser(email, password, getValidDate(), gender, name, phone))
+            var formValid = true
+            if (name.isEmpty()) {
+                editTextName.error = "Name must not be empty"
+                formValid = false
+            }
+
+            if (email.isEmpty()) {
+                editTextEmail.error = "Email must not be empty"
+                formValid = false
+            }
+
+            if (password.isEmpty()) {
+                editTextPassword.error = "Password must not be empty"
+                formValid = false
+            }
+
+            if (password != confirmPassword) {
+                editTextPassword.error = "Password and confirmation not match"
+                editTextConfirmPassword.error = "Password and confirmation not match"
+                formValid = false
+            }
+
+            if (formValid){
+                viewModel.signUp(NewUser(email, password, getValidDate(), gender, name, phone))
+            }
+
         }
 
     }
 
-    fun getValidDate(): Date {
+    private fun getValidDate(): Date {
         val cal = Calendar.getInstance()
-        cal.set(Calendar.YEAR, 1999);
+        cal.set(Calendar.YEAR, 1999)
 
         return cal.time
     }

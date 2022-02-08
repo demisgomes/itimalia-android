@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">itimalia-android</string>
+    <string name="sign_up">SIGN UP</string>
     <string-array name="spinner_gender_items">
         <item>Male</item>
         <item>Female</item>
