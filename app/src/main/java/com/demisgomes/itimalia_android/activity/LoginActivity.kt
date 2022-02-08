@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             else {
-                Toast.makeText(this, "Ocorreu um erro: ${it.errorMessage}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Ocorreu um erro: ${it.errorResponse?.message}", Toast.LENGTH_LONG).show()
             }
 
         }

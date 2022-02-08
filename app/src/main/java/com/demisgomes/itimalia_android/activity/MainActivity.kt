@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity() {
                 it.response.first().toString()
             )
 
-            else it.errorMessage?.let { message ->
-                Log.d("MainActivity", message)
+            else it.errorResponse?.let { errorResponse ->
+                Log.d("MainActivity", errorResponse.message)
             }
         }
     }

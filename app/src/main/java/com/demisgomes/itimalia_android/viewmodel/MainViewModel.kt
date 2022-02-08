@@ -2,6 +2,7 @@ package com.demisgomes.itimalia_android.viewmodel
 
 import androidx.lifecycle.*
 import com.demisgomes.itimalia_android.domain.animal.Animal
+import com.demisgomes.itimalia_android.domain.error.ErrorResponse
 import com.demisgomes.itimalia_android.repository.Repository
 import com.demisgomes.itimalia_android.retrofit.RepositoryCallback
 import kotlinx.coroutines.launch
@@ -19,8 +20,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
                     _responseViewModel.value = ResponseViewModel(t)
                 }
 
-                override fun failure(message: String) {
-                    _responseViewModel.value = ResponseViewModel(errorMessage = message)
+                override fun failure(errorResponse: ErrorResponse) {
+                    _responseViewModel.value = ResponseViewModel(errorResponse = errorResponse)
                 }
 
             })

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.demisgomes.itimalia_android.domain.error.ErrorResponse
 import com.demisgomes.itimalia_android.domain.user.NewUser
 import com.demisgomes.itimalia_android.domain.user.User
 import com.demisgomes.itimalia_android.domain.user.UserLogin
@@ -22,8 +23,8 @@ class SignUpViewModel(private val repository: Repository): ViewModel() {
                     _responseViewModel.value = ResponseViewModel(t)
                 }
 
-                override fun failure(message: String) {
-                    _responseViewModel.value = ResponseViewModel(errorMessage = message)
+                override fun failure(errorResponse: ErrorResponse) {
+                    _responseViewModel.value = ResponseViewModel(errorResponse = errorResponse)
                 }
 
             })

@@ -7,6 +7,7 @@ import com.demisgomes.itimalia_android.retrofit.WebService
 import com.demisgomes.itimalia_android.viewmodel.LoginViewModel
 import com.demisgomes.itimalia_android.viewmodel.MainViewModel
 import com.demisgomes.itimalia_android.viewmodel.SignUpViewModel
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -16,8 +17,12 @@ val appModule = module {
         RetroConfig.buildWebService()
     }
 
+    single<Gson> {
+        Gson()
+    }
+
     factory<Repository> {
-        RepositoryImpl(get())
+        RepositoryImpl(get(), get())
     }
 
     viewModel<MainViewModel> {

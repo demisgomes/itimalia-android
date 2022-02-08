@@ -1,3 +1,5 @@
 package com.demisgomes.itimalia_android.viewmodel
 
-data class ResponseViewModel<T>(val response : T? = null, val errorMessage: String? = null)
+import com.demisgomes.itimalia_android.domain.error.ErrorResponse
+
+data class ResponseViewModel<T>(val response : T? = null, val errorResponse: ErrorResponse? = null)

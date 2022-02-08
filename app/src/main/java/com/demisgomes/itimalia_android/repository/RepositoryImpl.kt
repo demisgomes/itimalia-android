@@ -1,16 +1,18 @@
 package com.demisgomes.itimalia_android.repository
 
 import com.demisgomes.itimalia_android.domain.animal.Animal
+import com.demisgomes.itimalia_android.domain.error.ErrorResponse
 import com.demisgomes.itimalia_android.domain.user.NewUser
 import com.demisgomes.itimalia_android.domain.user.User
 import com.demisgomes.itimalia_android.domain.user.UserLogin
 import com.demisgomes.itimalia_android.retrofit.RepositoryCallback
 import com.demisgomes.itimalia_android.retrofit.WebService
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RepositoryImpl(private val webService: WebService) : Repository {
+class RepositoryImpl(private val webService: WebService, private val gson: Gson) : Repository {
     override fun getAnimalsList(callbackAnimals: RepositoryCallback<List<Animal>>) {
         val call = webService.getAnimals()
 
@@ -19,11 +21,16 @@ class RepositoryImpl(private val webService: WebService) : Repository {
                 if (response.isSuccessful) {
                     response.body()?.let { callbackAnimals.success(it) }
                 }
-                else callbackAnimals.failure(response.message())
-            }
+                else{
+                    val errorResponse: ErrorResponse? = gson.fromJson(response.errorBody()?.charStream(), ErrorResponse::class.java)
+                    if (errorResponse != null) {
+                        callbackAnimals.failure(errorResponse)
+                    }
+                }
+             }
 
             override fun onFailure(call: Call<List<Animal>>, t: Throwable) {
-                t.message?.let { callbackAnimals.failure(it) }
+                t.message?.let { callbackAnimals.failure(ErrorResponse("CLIENT_ERROR", it)) }
             }
 
         })
@@ -37,11 +44,16 @@ class RepositoryImpl(private val webService: WebService) : Repository {
                 if (response.isSuccessful) {
                     response.body()?.let { callbackLogin.success(it) }
                 }
-                else callbackLogin.failure(response.message())
+                else {
+                    val errorResponse: ErrorResponse? = gson.fromJson(response.errorBody()?.charStream(), ErrorResponse::class.java)
+                    if (errorResponse != null) {
+                        callbackLogin.failure(errorResponse)
+                    }
+                }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                t.message?.let { callbackLogin.failure(it) }
+                t.message?.let { callbackLogin.failure(ErrorResponse("CLIENT_ERROR", it)) }
             }
 
         })
@@ -55,11 +67,16 @@ class RepositoryImpl(private val webService: WebService) : Repository {
                 if (response.isSuccessful) {
                     response.body()?.let { callbackLogin.success(it) }
                 }
-                else callbackLogin.failure(response.message())
+                else {
+                    val errorResponse: ErrorResponse? = gson.fromJson(response.errorBody()?.charStream(), ErrorResponse::class.java)
+                    if (errorResponse != null) {
+                        callbackLogin.failure(errorResponse)
+                    }
+                }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                t.message?.let { callbackLogin.failure(it) }
+                t.message?.let { callbackLogin.failure(ErrorResponse("CLIENT_ERROR", it)) }
             }
 
         })
