@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
 import com.demisgomes.itimalia_android.R
+import com.demisgomes.itimalia_android.domain.error.ErrorResponse
 import com.demisgomes.itimalia_android.domain.user.Gender
 import com.demisgomes.itimalia_android.domain.user.NewUser
 import com.demisgomes.itimalia_android.domain.user.UserLogin
@@ -47,9 +48,7 @@ class SignUpActivity : AppCompatActivity() {
 
             else {
                 Toast.makeText(this, "An error has occurred on sign up, please check the fields.", Toast.LENGTH_LONG).show()
-                responseViewModel.errorResponse?.details?.forEach {
-                    setErrorsOnEditTexts(it)
-                }
+                responseViewModel.errorResponse?.let { setErrorsOnEditTexts(it) }
             }
 
         }
@@ -70,27 +69,36 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    private fun setErrorsOnEditTexts(it: Map.Entry<String, List<String>>) {
+    private fun setErrorsOnEditTexts(errorResponse: ErrorResponse) {
 
-        if (it.key.contains("name")) {
-            editTextName.error = it.value.first()
-            editTextName.requestFocus()
+        errorResponse.details?.forEach {
+            if (it.key.contains("name")) {
+                editTextName.error = it.value.first()
+                editTextName.requestFocus()
+            }
+
+            if (it.key.contains("email")) {
+                editTextEmail.error = it.value.first()
+                editTextEmail.requestFocus()
+            }
+
+            if (it.key.contains("password")) {
+                editTextPassword.error = it.value.first()
+                editTextPassword.requestFocus()
+            }
+
+            if (it.key.contains("phone")) {
+                editTextPhone.error = it.value.first()
+                editTextPhone.requestFocus()
+            }
         }
 
-        if (it.key.contains("email")) {
-            editTextEmail.error = it.value.first()
+        if (errorResponse.apiError == "EMAIL_ALREADY_EXISTS_ERROR"){
+            editTextEmail.error = errorResponse.message
             editTextEmail.requestFocus()
         }
 
-        if (it.key.contains("password")) {
-            editTextPassword.error = it.value.first()
-            editTextPassword.requestFocus()
-        }
 
-        if (it.key.contains("phone")) {
-            editTextPhone.error = it.value.first()
-            editTextPhone.requestFocus()
-        }
     }
 
     // think in a better name
