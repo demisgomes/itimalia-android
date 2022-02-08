@@ -25,25 +25,49 @@ class LoginActivity : AppCompatActivity() {
 
         val buttonSignUp: Button = findViewById(R.id.button_sign_in_sign_up)
 
-        viewModel.responseViewModel.observe(this) {
-            val user = it.response
+        viewModel.responseViewModel.observe(this) { responseViewModel ->
+            val user = responseViewModel.response
 
             if (user !== null){
-                Toast.makeText(this, "Login efetuado com sucesso, ${user.name}!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Login succeeded, ${user.name}!", Toast.LENGTH_LONG).show()
+                finish()
             }
 
             else {
-                Toast.makeText(this, "Ocorreu um erro: ${it.errorResponse?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Invalid username or password", Toast.LENGTH_LONG).show()
+
+                editTextEmail.error = "Please fill with a valid email"
+                editTextEmail.requestFocus()
+                editTextPassword.error = "Please fill with a valid password"
+
             }
 
         }
 
 
         buttonSignIn.setOnClickListener {
+
+            var isFormValid = true
+
             val email = editTextEmail.text.toString().trim()
             val password = editTextPassword.text.toString().trim()
 
-            viewModel.login(UserLogin(email, password))
+            if (email.isEmpty()) {
+                editTextEmail.error = "Email must not be empty"
+                editTextEmail.requestFocus()
+                isFormValid = false
+            }
+
+            if (password.isEmpty()) {
+                editTextPassword.error = "Password must not be empty"
+                editTextPassword.requestFocus()
+                isFormValid = false
+            }
+
+
+            if(isFormValid){
+                viewModel.login(UserLogin(email, password))
+            }
         }
 
         buttonSignUp.setOnClickListener {
