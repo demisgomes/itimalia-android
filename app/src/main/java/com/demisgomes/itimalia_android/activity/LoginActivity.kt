@@ -3,8 +3,10 @@ package com.demisgomes.itimalia_android.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.demisgomes.itimalia_android.R
 import com.demisgomes.itimalia_android.domain.user.UserLogin
@@ -25,16 +27,20 @@ class LoginActivity : AppCompatActivity() {
 
         val buttonSignUp: Button = findViewById(R.id.button_sign_in_sign_up)
 
+        val progressBarSignIn: ProgressBar = findViewById(R.id.progressBarSignIn)
+
         viewModel.responseViewModel.observe(this) { responseViewModel ->
+            progressBarSignIn.visibility = View.GONE
+
             val user = responseViewModel.response
 
             if (user !== null){
-                Toast.makeText(this, "Login succeeded, ${user.name}!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.welcome_message, user.name), Toast.LENGTH_LONG).show()
                 finish()
             }
 
             else {
-                Toast.makeText(this, "Invalid username or password", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.invalid_username_password), Toast.LENGTH_LONG).show()
 
                 editTextEmail.error = "Please fill with a valid email"
                 editTextEmail.requestFocus()
@@ -53,19 +59,20 @@ class LoginActivity : AppCompatActivity() {
             val password = editTextPassword.text.toString().trim()
 
             if (email.isEmpty()) {
-                editTextEmail.error = "Email must not be empty"
+                editTextEmail.error = getString(R.string.field_required, "Email")
                 editTextEmail.requestFocus()
                 isFormValid = false
             }
 
             if (password.isEmpty()) {
-                editTextPassword.error = "Password must not be empty"
+                editTextPassword.error = getString(R.string.field_required, "Password")
                 editTextPassword.requestFocus()
                 isFormValid = false
             }
 
 
             if(isFormValid){
+                progressBarSignIn.visibility = View.VISIBLE
                 viewModel.login(UserLogin(email, password))
             }
         }

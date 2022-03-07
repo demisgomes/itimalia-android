@@ -60,9 +60,22 @@
         android:id="@+id/button_sign_in_sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="80dp"
         android:text="SIGN UP"
         app:layout_constraintEnd_toEndOf="@+id/buttonSignIn"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/buttonSignIn"
         app:layout_constraintTop_toBottomOf="@+id/buttonSignIn" />
+
+    <ProgressBar
+        android:id="@+id/progressBarSignIn"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/buttonSignIn"
+        app:layout_constraintStart_toStartOf="@+id/buttonSignIn"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSignIn"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

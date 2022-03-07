@@ -42,12 +42,12 @@ class SignUpActivity : AppCompatActivity() {
             val user = responseViewModel.response
 
             if (user !== null){
-                Toast.makeText(this, "Sign up succeeded, ${user.name}!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.sign_up_message, user.name), Toast.LENGTH_LONG).show()
                 finish()
             }
 
             else {
-                Toast.makeText(this, "An error has occurred on sign up, please check the fields.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.sign_up_error_message), Toast.LENGTH_LONG).show()
                 responseViewModel.errorResponse?.let { setErrorsOnEditTexts(it) }
             }
 
@@ -114,32 +114,32 @@ class SignUpActivity : AppCompatActivity() {
         resetErrorsFromEditTexts()
 
         if (name.isEmpty()) {
-            editTextName.error = "Name must not be empty"
+            editTextName.error = getString(R.string.field_required, "Name")
             editTextName.requestFocus()
             formValid = false
         }
 
         if (email.isEmpty()) {
-            editTextEmail.error = "Email must not be empty"
+            editTextEmail.error = getString(R.string.field_required, "Email")
             editTextEmail.requestFocus()
             formValid = false
         }
 
         if (password.isEmpty()) {
-            editTextPassword.error = "Password must not be empty"
+            editTextPassword.error = getString(R.string.field_required, "Password")
             editTextPassword.requestFocus()
             formValid = false
         }
 
         if (password != confirmPassword) {
-            editTextPassword.error = "Password and confirmation not match"
-            editTextConfirmPassword.error = "Password and confirmation not match"
+            editTextPassword.error = getString(R.string.password_confirmation_not_match)
+            editTextConfirmPassword.error = getString(R.string.password_confirmation_not_match)
             editTextConfirmPassword.requestFocus()
             formValid = false
         }
 
         if (phone.isEmpty()) {
-            editTextPhone.error = "Phone must not be empty"
+            editTextPhone.error = getString(R.string.field_required, "Phone")
             editTextPhone.requestFocus()
             formValid = false
         }
