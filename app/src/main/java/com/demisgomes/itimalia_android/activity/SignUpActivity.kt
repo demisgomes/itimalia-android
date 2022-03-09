@@ -4,11 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
 import com.demisgomes.itimalia_android.R
+import com.demisgomes.itimalia_android.databinding.ActivitySignUpBinding
 import com.demisgomes.itimalia_android.domain.error.ErrorResponse
 import com.demisgomes.itimalia_android.domain.user.Gender
 import com.demisgomes.itimalia_android.domain.user.NewUser
-import com.demisgomes.itimalia_android.domain.user.UserLogin
-import com.demisgomes.itimalia_android.viewmodel.LoginViewModel
 import com.demisgomes.itimalia_android.viewmodel.SignUpViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -16,25 +15,14 @@ import java.util.*
 class SignUpActivity : AppCompatActivity() {
     private val viewModel: SignUpViewModel by viewModel()
 
-    private lateinit var editTextName: EditText
-    private lateinit var editTextEmail: EditText
-    private lateinit var editTextPassword: EditText
-    private lateinit var editTextConfirmPassword: EditText
-    private lateinit var editTextPhone: EditText
-    private lateinit var spinnerGender: Spinner
+    private lateinit var binding: ActivitySignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        editTextName = findViewById(R.id.edit_text_sign_up_name)
-        editTextEmail = findViewById(R.id.edit_text_sign_up_email)
-        editTextPassword = findViewById(R.id.edit_text_sign_up_password)
-        editTextConfirmPassword = findViewById(R.id.edit_text_sign_up_confirm_password)
-        editTextPhone = findViewById(R.id.edit_text_sign_up_phone)
-        spinnerGender = findViewById(R.id.spinner_sign_up_gender)
-
-        spinnerGender.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, Gender.values().map { it.description })
+        binding.spinnerSignUpGender.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, Gender.values().map { it.description })
 
         val buttonSignUp: Button = findViewById(R.id.button_sign_up)
 
@@ -54,12 +42,12 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         buttonSignUp.setOnClickListener {
-            val name = editTextName.text.toString().trim()
-            val email = editTextEmail.text.toString().trim()
-            val password = editTextPassword.text.toString().trim()
-            val confirmPassword = editTextConfirmPassword.text.toString().trim()
-            val phone = editTextPhone.text.toString().trim()
-            val gender = Gender.valueOf(spinnerGender.selectedItem.toString())
+            val name = binding.editTextSignUpName.text.toString().trim()
+            val email = binding.editTextSignUpEmail.text.toString().trim()
+            val password = binding.editTextSignUpPassword.text.toString().trim()
+            val confirmPassword = binding.editTextSignUpConfirmPassword.text.toString().trim()
+            val phone = binding.editTextSignUpPhone.text.toString().trim()
+            val gender = Gender.valueOf(binding.spinnerSignUpGender.selectedItem.toString())
 
             if (isFormValid(name, email, password, confirmPassword, phone)){
                 viewModel.signUp(NewUser(email, password, getValidDate(), gender, name, phone))
@@ -73,29 +61,29 @@ class SignUpActivity : AppCompatActivity() {
 
         errorResponse.details?.forEach {
             if (it.key.contains("name")) {
-                editTextName.error = it.value.first()
-                editTextName.requestFocus()
+                binding.editTextSignUpName.error = it.value.first()
+                binding.editTextSignUpName.requestFocus()
             }
 
             if (it.key.contains("email")) {
-                editTextEmail.error = it.value.first()
-                editTextEmail.requestFocus()
+                binding.editTextSignUpEmail.error = it.value.first()
+                binding.editTextSignUpEmail.requestFocus()
             }
 
             if (it.key.contains("password")) {
-                editTextPassword.error = it.value.first()
-                editTextPassword.requestFocus()
+                binding.editTextSignUpPassword.error = it.value.first()
+                binding.editTextSignUpPassword.requestFocus()
             }
 
             if (it.key.contains("phone")) {
-                editTextPhone.error = it.value.first()
-                editTextPhone.requestFocus()
+                binding.editTextSignUpPhone.error = it.value.first()
+                binding.editTextSignUpPhone.requestFocus()
             }
         }
 
         if (errorResponse.apiError == "EMAIL_ALREADY_EXISTS_ERROR"){
-            editTextEmail.error = errorResponse.message
-            editTextEmail.requestFocus()
+            binding.editTextSignUpEmail.error = errorResponse.message
+            binding.editTextSignUpEmail.requestFocus()
         }
 
 
@@ -114,33 +102,33 @@ class SignUpActivity : AppCompatActivity() {
         resetErrorsFromEditTexts()
 
         if (name.isEmpty()) {
-            editTextName.error = getString(R.string.field_required, "Name")
-            editTextName.requestFocus()
+            binding.editTextSignUpName.error = getString(R.string.field_required, "Name")
+            binding.editTextSignUpName.requestFocus()
             formValid = false
         }
 
         if (email.isEmpty()) {
-            editTextEmail.error = getString(R.string.field_required, "Email")
-            editTextEmail.requestFocus()
+            binding.editTextSignUpEmail.error = getString(R.string.field_required, "Email")
+            binding.editTextSignUpEmail.requestFocus()
             formValid = false
         }
 
         if (password.isEmpty()) {
-            editTextPassword.error = getString(R.string.field_required, "Password")
-            editTextPassword.requestFocus()
+            binding.editTextSignUpPassword.error = getString(R.string.field_required, "Password")
+            binding.editTextSignUpPassword.requestFocus()
             formValid = false
         }
 
         if (password != confirmPassword) {
-            editTextPassword.error = getString(R.string.password_confirmation_not_match)
-            editTextConfirmPassword.error = getString(R.string.password_confirmation_not_match)
-            editTextConfirmPassword.requestFocus()
+            binding.editTextSignUpPassword.error = getString(R.string.password_confirmation_not_match)
+            binding.editTextSignUpConfirmPassword.error = getString(R.string.password_confirmation_not_match)
+            binding.editTextSignUpConfirmPassword.requestFocus()
             formValid = false
         }
 
         if (phone.isEmpty()) {
-            editTextPhone.error = getString(R.string.field_required, "Phone")
-            editTextPhone.requestFocus()
+            binding.editTextSignUpPhone.error = getString(R.string.field_required, "Phone")
+            binding.editTextSignUpPhone.requestFocus()
             formValid = false
         }
 
@@ -148,11 +136,11 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun resetErrorsFromEditTexts() {
-        editTextName.error = null
-        editTextEmail.error = null
-        editTextPassword.error = null
-        editTextConfirmPassword.error = null
-        editTextPhone.error = null
+        binding.editTextSignUpName.error = null
+        binding.editTextSignUpEmail.error = null
+        binding.editTextSignUpPassword.error = null
+        binding.editTextSignUpConfirmPassword.error = null
+        binding.editTextSignUpPhone.error = null
     }
 
     private fun getValidDate(): Date {
