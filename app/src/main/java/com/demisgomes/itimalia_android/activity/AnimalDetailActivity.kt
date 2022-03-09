@@ -6,38 +6,34 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.demisgomes.itimalia_android.R
+import com.demisgomes.itimalia_android.databinding.ActivityAnimalDetailBinding
+import com.demisgomes.itimalia_android.databinding.ActivityLoginBinding
 import com.demisgomes.itimalia_android.domain.animal.Animal
 
 class AnimalDetailActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityAnimalDetailBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_animal_detail)
-
-        val imageViewAnimal : ImageView = findViewById(R.id.imageViewAnimal)
-        val textViewName : TextView = findViewById(R.id.textViewName)
-        val textViewDescription : TextView = findViewById(R.id.textViewDescription)
-        val textViewAge : TextView = findViewById(R.id.textViewAgeValue)
-        val textViewSex : TextView = findViewById(R.id.textViewSexValue)
-        val textViewSize : TextView = findViewById(R.id.textViewSizeValue)
-        val textViewCastrated : TextView = findViewById(R.id.textViewCastratedValue)
-        val textViewStatus : TextView = findViewById(R.id.textViewStatusValue)
-
+        binding = ActivityAnimalDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         if (intent.hasExtra(animalKey)){
             val animal = intent.extras?.get(animalKey) as Animal
 
-            Glide.with(this).load(animal.imageUrl).centerCrop().into(imageViewAnimal)
-            textViewName.text = animal.name
-            textViewDescription.text = animal.description
-            textViewAge.text =
+            Glide.with(this).load(animal.imageUrl).centerCrop().into(binding.imageViewAnimal)
+            binding.textViewName.text = animal.name
+            binding.textViewDescription.text = animal.description
+            binding.textViewAgeValue.text =
                 animal.age?.let {
                     resources.getQuantityString(R.plurals.animal_age,
                         it, it, animal.timeUnit.toString().lowercase())
                 }
-            textViewSex.text = animal.sex.toString().lowercase()
-            textViewSize.text = animal.size.toString().lowercase()
-            textViewCastrated.text = if (animal.castrated) "yes" else "no"
-            textViewStatus.text = animal.status.toString().lowercase()
+            binding.textViewSexValue.text = animal.sex.toString().lowercase()
+            binding.textViewSizeValue.text = animal.size.toString().lowercase()
+            binding.textViewCastratedValue.text = if (animal.castrated) "yes" else "no"
+            binding.textViewStatusValue.text = animal.status.toString().lowercase()
         }
     }
 }
