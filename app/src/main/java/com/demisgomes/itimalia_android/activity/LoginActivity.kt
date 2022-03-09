@@ -9,6 +9,8 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.demisgomes.itimalia_android.R
+import com.demisgomes.itimalia_android.databinding.ActivityLoginBinding
+import com.demisgomes.itimalia_android.databinding.ActivitySignUpBinding
 import com.demisgomes.itimalia_android.domain.user.UserLogin
 import com.demisgomes.itimalia_android.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -16,21 +18,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class LoginActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by viewModel()
 
+    private lateinit var binding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        val editTextEmail: EditText = findViewById(R.id.editTextEmailAddress)
-        val editTextPassword: EditText = findViewById(R.id.editTextPassword)
-        val buttonSignIn: Button = findViewById(R.id.buttonSignIn)
-
-        val buttonSignUp: Button = findViewById(R.id.button_sign_in_sign_up)
-
-        val progressBarSignIn: ProgressBar = findViewById(R.id.progressBarSignIn)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         viewModel.responseViewModel.observe(this) { responseViewModel ->
-            progressBarSignIn.visibility = View.GONE
+            binding.progressBarSignIn.visibility = View.GONE
 
             val user = responseViewModel.response
 
@@ -42,42 +38,42 @@ class LoginActivity : AppCompatActivity() {
             else {
                 Toast.makeText(this, getString(R.string.invalid_username_password), Toast.LENGTH_LONG).show()
 
-                editTextEmail.error = "Please fill with a valid email"
-                editTextEmail.requestFocus()
-                editTextPassword.error = "Please fill with a valid password"
+                binding.editTextEmailAddress.error = "Please fill with a valid email"
+                binding.editTextEmailAddress.requestFocus()
+                binding.editTextPassword.error = "Please fill with a valid password"
 
             }
 
         }
 
 
-        buttonSignIn.setOnClickListener {
+        binding.buttonSignIn.setOnClickListener {
 
             var isFormValid = true
 
-            val email = editTextEmail.text.toString().trim()
-            val password = editTextPassword.text.toString().trim()
+            val email = binding.editTextEmailAddress.text.toString().trim()
+            val password = binding.editTextPassword.text.toString().trim()
 
             if (email.isEmpty()) {
-                editTextEmail.error = getString(R.string.field_required, "Email")
-                editTextEmail.requestFocus()
+                binding.editTextEmailAddress.error = getString(R.string.field_required, "Email")
+                binding.editTextEmailAddress.requestFocus()
                 isFormValid = false
             }
 
             if (password.isEmpty()) {
-                editTextPassword.error = getString(R.string.field_required, "Password")
-                editTextPassword.requestFocus()
+                binding.editTextPassword.error = getString(R.string.field_required, "Password")
+                binding.editTextPassword.requestFocus()
                 isFormValid = false
             }
 
 
             if(isFormValid){
-                progressBarSignIn.visibility = View.VISIBLE
+                binding.progressBarSignIn.visibility = View.VISIBLE
                 viewModel.login(UserLogin(email, password))
             }
         }
 
-        buttonSignUp.setOnClickListener {
+        binding.buttonSignInSignUp.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
