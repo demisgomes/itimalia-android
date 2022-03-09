@@ -38,9 +38,9 @@ class LoginActivity : AppCompatActivity() {
             else {
                 Toast.makeText(this, getString(R.string.invalid_username_password), Toast.LENGTH_LONG).show()
 
-                binding.editTextEmailAddress.error = "Please fill with a valid email"
+                binding.editTextEmailAddress.error = getString(R.string.invalid_field, "email")
                 binding.editTextEmailAddress.requestFocus()
-                binding.editTextPassword.error = "Please fill with a valid password"
+                binding.editTextPassword.error = getString(R.string.invalid_field, "password")
 
             }
 

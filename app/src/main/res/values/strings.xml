@@ -6,6 +6,7 @@
     <string name="field_required">%1$s must not be empty</string>
     <string name="invalid_username_password">Invalid username or password</string>
     <string name="password_confirmation_not_match">Password and confirmation not match</string>
+    <string name="invalid_field">Please fill with a valid %s</string>
     <plurals name="animal_age">
         <item quantity="one">%1$d %2$s</item>
         <item quantity="other">%1$d %2$ss</item>
