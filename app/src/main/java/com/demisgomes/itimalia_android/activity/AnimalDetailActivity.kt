@@ -29,7 +29,11 @@ class AnimalDetailActivity : AppCompatActivity() {
             Glide.with(this).load(animal.imageUrl).centerCrop().into(imageViewAnimal)
             textViewName.text = animal.name
             textViewDescription.text = animal.description
-            textViewAge.text = "${animal.age} ${animal.timeUnit.toString().lowercase()}s"
+            textViewAge.text =
+                animal.age?.let {
+                    resources.getQuantityString(R.plurals.animal_age,
+                        it, it, animal.timeUnit.toString().lowercase())
+                }
             textViewSex.text = animal.sex.toString().lowercase()
             textViewSize.text = animal.size.toString().lowercase()
             textViewCastrated.text = if (animal.castrated) "yes" else "no"
