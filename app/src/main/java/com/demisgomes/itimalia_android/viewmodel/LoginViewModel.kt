@@ -1,6 +1,7 @@
 package com.demisgomes.itimalia_android.viewmodel
 
 import androidx.lifecycle.*
+import com.demisgomes.itimalia_android.domain.StatusResponse
 import com.demisgomes.itimalia_android.domain.error.ErrorResponse
 import com.demisgomes.itimalia_android.domain.user.User
 import com.demisgomes.itimalia_android.domain.user.UserLogin
@@ -10,18 +11,21 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repository: Repository) : ViewModel() {
 
-    private val _responseViewModel = MutableLiveData<ResponseViewModel<User>>()
-    val responseViewModel: LiveData<ResponseViewModel<User>> = _responseViewModel
+    private val _responseViewModel = MutableLiveData<StatusResponse<User>>()
+    val responseViewModel: LiveData<StatusResponse<User>> = _responseViewModel
 
     fun login(userLogin: UserLogin) =
         viewModelScope.launch {
+
+            _responseViewModel.value = StatusResponse.Loading
+
             repository.login(userLogin, object : RepositoryCallback<User> {
                 override fun success(t: User) {
-                    _responseViewModel.value = ResponseViewModel(t)
+                    _responseViewModel.value = StatusResponse.Success(t)
                 }
 
                 override fun failure(errorResponse: ErrorResponse) {
-                    _responseViewModel.value = ResponseViewModel(errorResponse = errorResponse)
+                    _responseViewModel.value = StatusResponse.Error(errorResponse)
                 }
 
             })

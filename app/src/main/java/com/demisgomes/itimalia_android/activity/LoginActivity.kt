@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.demisgomes.itimalia_android.R
 import com.demisgomes.itimalia_android.databinding.ActivityLoginBinding
 import com.demisgomes.itimalia_android.databinding.ActivitySignUpBinding
+import com.demisgomes.itimalia_android.domain.StatusResponse
 import com.demisgomes.itimalia_android.domain.user.UserLogin
 import com.demisgomes.itimalia_android.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,22 +27,34 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel.responseViewModel.observe(this) { responseViewModel ->
-            binding.progressBarSignIn.visibility = View.GONE
 
-            val user = responseViewModel.response
+            when (responseViewModel) {
+                is StatusResponse.Success -> {
+                    binding.progressBarSignIn.visibility = View.GONE
+                    val user = responseViewModel.data
+                    Toast.makeText(
+                        this,
+                        getString(R.string.welcome_message, user.name),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    finish()
+                }
+                is StatusResponse.Loading -> {
+                    binding.progressBarSignIn.visibility = View.VISIBLE
+                }
+                is StatusResponse.Error -> {
+                    binding.progressBarSignIn.visibility = View.GONE
+                    Toast.makeText(
+                        this,
+                        getString(R.string.invalid_username_password),
+                        Toast.LENGTH_LONG
+                    ).show()
 
-            if (user !== null){
-                Toast.makeText(this, getString(R.string.welcome_message, user.name), Toast.LENGTH_LONG).show()
-                finish()
-            }
+                    binding.editTextEmailAddress.error = getString(R.string.invalid_field, "email")
+                    binding.editTextEmailAddress.requestFocus()
+                    binding.editTextPassword.error = getString(R.string.invalid_field, "password")
 
-            else {
-                Toast.makeText(this, getString(R.string.invalid_username_password), Toast.LENGTH_LONG).show()
-
-                binding.editTextEmailAddress.error = getString(R.string.invalid_field, "email")
-                binding.editTextEmailAddress.requestFocus()
-                binding.editTextPassword.error = getString(R.string.invalid_field, "password")
-
+                }
             }
 
         }
@@ -68,7 +81,6 @@ class LoginActivity : AppCompatActivity() {
 
 
             if(isFormValid){
-                binding.progressBarSignIn.visibility = View.VISIBLE
                 viewModel.login(UserLogin(email, password))
             }
         }
