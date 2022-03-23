@@ -8,11 +8,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.room.Room
 import com.demisgomes.itimalia_android.R
 import com.demisgomes.itimalia_android.databinding.ActivityLoginBinding
 import com.demisgomes.itimalia_android.databinding.ActivitySignUpBinding
 import com.demisgomes.itimalia_android.domain.StatusResponse
 import com.demisgomes.itimalia_android.domain.user.UserLogin
+import com.demisgomes.itimalia_android.room.AppDatabase
+import com.demisgomes.itimalia_android.room.UserEntity
 import com.demisgomes.itimalia_android.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
