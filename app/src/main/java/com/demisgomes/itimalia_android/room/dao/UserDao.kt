@@ -1,9 +1,10 @@
-package com.demisgomes.itimalia_android.room
+package com.demisgomes.itimalia_android.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.demisgomes.itimalia_android.room.entities.UserEntity
 
 @Dao
 interface UserDao {
